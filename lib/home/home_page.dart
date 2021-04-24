@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nlwabril/challenge/challenge_page.dart';
 import 'package:nlwabril/core/app_colors.dart';
 import 'package:nlwabril/core/app_text_styles.dart';
 import 'package:nlwabril/home/home_controller.dart';
@@ -57,7 +58,7 @@ class _HomePageState extends State<HomePage> {
               SizedBox(
                 height: 24,
               ),
-              quizCards(controller)
+              quizCards(context, controller)
             ],
           ),
         ),
@@ -85,7 +86,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget quizCards(controller) {
+  Widget quizCards(BuildContext context, controller) {
     return Expanded(
       child: GridView.count(
         mainAxisSpacing: 16,
@@ -93,7 +94,18 @@ class _HomePageState extends State<HomePage> {
         crossAxisCount: 2,
         children: controller.quizzes!
             .map<Widget>(
-              (quiz) => QuizCard(quiz: quiz),
+              (quiz) => QuizCard(
+                quiz: quiz,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          ChallengePage(questions: quiz.questions),
+                    ),
+                  );
+                },
+              ),
             )
             .toList(),
       ),
