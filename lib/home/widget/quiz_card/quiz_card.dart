@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:nlwabril/core/app_colors.dart';
-import 'package:nlwabril/core/app_images.dart';
 import 'package:nlwabril/core/app_text_styles.dart';
+import 'package:nlwabril/shared/models/quiz_model.dart';
 import 'package:nlwabril/shared/widgets/progress_indicator.dart';
 
 class QuizCard extends StatelessWidget {
+  final QuizModel quiz;
+
+  const QuizCard({Key? key, required this.quiz}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -23,10 +27,11 @@ class QuizCard extends StatelessWidget {
           Container(
             height: 40,
             width: 40,
-            child: Image.asset(AppImages.blocks),
+            // Note: add image based on JSON
+            // child: Image.asset(quiz.imagem),
           ),
           Text(
-            'Gerenciamento de estado',
+            quiz.title,
             style: AppTextStyles.heading15,
           ),
           Row(
@@ -34,13 +39,14 @@ class QuizCard extends StatelessWidget {
               Expanded(
                 flex: 1,
                 child: Text(
-                  "3 de 10",
+                  "${quiz.questionAnswered}/${quiz.questions.length}",
                   style: AppTextStyles.body11,
                 ),
               ),
               Expanded(
                 flex: 2,
-                child: ProgressIndicatorWidget(value: 0.3),
+                child: ProgressIndicatorWidget(
+                    value: quiz.questionAnswered / quiz.questions.length),
               )
             ],
           )

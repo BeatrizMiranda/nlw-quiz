@@ -3,9 +3,12 @@ import 'package:nlwabril/core/app_gradients.dart';
 import 'package:nlwabril/core/app_text_styles.dart';
 import 'package:nlwabril/home/widget/ScoreCard/score_card.dart';
 import 'package:flutter/material.dart';
+import 'package:nlwabril/shared/models/user_model.dart';
 
 class AppBarWidget extends PreferredSize {
-  AppBarWidget()
+  final UserModel user;
+
+  AppBarWidget({required this.user})
       : super(
           preferredSize: Size.fromHeight(250),
           child: Container(
@@ -26,8 +29,7 @@ class AppBarWidget extends PreferredSize {
                           style: AppTextStyles.title,
                           children: [
                             TextSpan(
-                                text: "Bea Miranda",
-                                style: AppTextStyles.titleBold)
+                                text: user.name, style: AppTextStyles.titleBold)
                           ],
                         ),
                       ),
@@ -41,8 +43,7 @@ class AppBarWidget extends PreferredSize {
                             width: 3,
                           ),
                           image: DecorationImage(
-                            image: NetworkImage(
-                                'https://avatars.githubusercontent.com/u/28959326?v=4'),
+                            image: NetworkImage(user.photoUrl),
                           ),
                         ),
                       ),

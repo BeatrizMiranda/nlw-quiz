@@ -1,5 +1,9 @@
-import 'package:nlwabril/home/widget/appbar/app_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:nlwabril/core/app_colors.dart';
+import 'package:nlwabril/core/app_text_styles.dart';
+import 'package:nlwabril/home/home_controller.dart';
+import 'package:nlwabril/home/home_state.dart';
+import 'package:nlwabril/home/widget/appbar/app_bar.dart';
 import 'package:nlwabril/home/widget/levelButton/level_button.dart';
 import 'package:nlwabril/home/widget/quiz_card/quiz_card.dart';
 
@@ -11,20 +15,59 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final controller = HomeController();
+
+  @override
+  void initState() {
+    super.initState();
+    controller.getUser();
+    controller.getQuizzes();
+    controller.stateNotifier.addListener(() {
+      setState(() {});
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBarWidget(),
-      body: Padding(
-        padding: EdgeInsets.only(top: 50, left: 15, right: 15),
-        child: Column(
-          children: [
-            levelButons(),
-            SizedBox(
-              height: 24,
+    if (controller.state == HomeState.error) {
+      return Scaffold(
+        body: Center(
+          child: Container(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.error),
+                SizedBox(height: 20),
+                Text("Algo deu errado", style: AppTextStyles.heading),
+              ],
             ),
-            quizCards()
-          ],
+          ),
+        ),
+      );
+    }
+    if (controller.state == HomeState.success) {
+      return Scaffold(
+        appBar: AppBarWidget(user: controller.user!),
+        body: Padding(
+          padding: EdgeInsets.only(top: 50, left: 15, right: 15),
+          child: Column(
+            children: [
+              levelButons(),
+              SizedBox(
+                height: 24,
+              ),
+              quizCards(controller)
+            ],
+          ),
+        ),
+      );
+    }
+
+    return Scaffold(
+      body: Center(
+        child: CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation<Color>(AppColors.darkGreen),
         ),
       ),
     );
@@ -42,18 +85,17 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget quizCards() {
+  Widget quizCards(controller) {
     return Expanded(
       child: GridView.count(
         mainAxisSpacing: 16,
         crossAxisSpacing: 16,
         crossAxisCount: 2,
-        children: [
-          QuizCard(),
-          QuizCard(),
-          QuizCard(),
-          QuizCard(),
-        ],
+        children: controller.quizzes!
+            .map<Widget>(
+              (quiz) => QuizCard(quiz: quiz),
+            )
+            .toList(),
       ),
     );
   }
