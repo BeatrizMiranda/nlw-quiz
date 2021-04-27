@@ -3,12 +3,15 @@ import 'package:nlwabril/challenge/challenge_controller.dart';
 import 'package:nlwabril/challenge/widget/nextButton/next_button.dart';
 import 'package:nlwabril/challenge/widget/question_indicator/question_indicator.dart';
 import 'package:nlwabril/challenge/widget/quiz/quiz_widget.dart';
+import 'package:nlwabril/resultPage/resultPage.dart';
 import 'package:nlwabril/shared/models/question_model.dart';
 
 class ChallengePage extends StatefulWidget {
   final List<QuestionModel> questions;
+  final String title;
 
-  const ChallengePage({Key? key, required this.questions}) : super(key: key);
+  const ChallengePage({Key? key, required this.questions, required this.title})
+      : super(key: key);
   @override
   _ChallengePageState createState() => _ChallengePageState();
 }
@@ -27,7 +30,9 @@ class _ChallengePageState extends State<ChallengePage> {
     });
   }
 
-  void enableSend() {
+  void enableSend(bool value) {
+    if (value) controller.qtdHits++;
+
     setState(() {
       isSendBtnEnabled = true;
     });
@@ -40,8 +45,17 @@ class _ChallengePageState extends State<ChallengePage> {
     );
   }
 
-  void backToHome() {
-    Navigator.pop(context);
+  void goToResultPage() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ResultPage(
+          title: widget.title,
+          lenght: widget.questions.length,
+          correctAwnsers: controller.qtdHits,
+        ),
+      ),
+    );
   }
 
   @override
@@ -76,7 +90,7 @@ class _ChallengePageState extends State<ChallengePage> {
         controller: pageController,
         children: widget.questions
             .map(
-              (e) => QuizWidget(question: e, onChange: enableSend),
+              (e) => QuizWidget(question: e, onSelected: enableSend),
             )
             .toList(),
       ),
@@ -88,17 +102,23 @@ class _ChallengePageState extends State<ChallengePage> {
             builder: (context, value, _) => Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                NextButton.grey(
-                  label: "Pular",
-                  onTap: nextPage,
-                  isEnabled: widget.questions.length != controller.currentPage,
+                Expanded(
+                  child: NextButton.grey(
+                    label: "Pular",
+                    onTap: nextPage,
+                    isEnabled:
+                        widget.questions.length != controller.currentPage,
+                  ),
                 ),
                 SizedBox(width: 10),
-                NextButton.green(
-                  label: "Enviar",
-                  onTap:
-                      widget.questions.length == value ? backToHome : nextPage,
-                  isEnabled: isSendBtnEnabled,
+                Expanded(
+                  child: NextButton.green(
+                    label: "Enviar",
+                    onTap: widget.questions.length == value
+                        ? goToResultPage
+                        : nextPage,
+                    isEnabled: isSendBtnEnabled,
+                  ),
                 ),
               ],
             ),

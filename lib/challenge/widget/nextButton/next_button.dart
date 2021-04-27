@@ -29,6 +29,15 @@ class NextButton extends StatelessWidget {
         this.isEnabled = isEnabled ?? true,
         this.label = label;
 
+  NextButton.purple(
+      {required String label, required VoidCallback onTap, bool? isEnabled})
+      : this.bgColor = AppColors.purple,
+        this.onTap = onTap,
+        this.fontColor = AppColors.white,
+        this.borderColor = AppColors.purple,
+        this.isEnabled = isEnabled ?? true,
+        this.label = label;
+
   NextButton.grey(
       {required String label, required VoidCallback onTap, bool? isEnabled})
       : this.bgColor = AppColors.white,
@@ -40,39 +49,37 @@ class NextButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        height: 48,
-        child: IgnorePointer(
-          ignoring: !isEnabled,
-          child: TextButton(
-            style: ButtonStyle(
-              backgroundColor: isEnabled
-                  ? MaterialStateProperty.all(
-                      bgColor,
-                    )
-                  : MaterialStateProperty.all(
-                      Color(0xFFd4d4d4),
-                    ),
-              shape: MaterialStateProperty.all(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              side: MaterialStateProperty.all(
-                BorderSide(
-                  color: isEnabled ? borderColor : Color(0xFFd4d4d4),
-                ),
+    return Container(
+      height: 48,
+      child: IgnorePointer(
+        ignoring: !isEnabled,
+        child: TextButton(
+          style: ButtonStyle(
+            backgroundColor: isEnabled
+                ? MaterialStateProperty.all(
+                    bgColor,
+                  )
+                : MaterialStateProperty.all(
+                    Color(0xFFd4d4d4),
+                  ),
+            shape: MaterialStateProperty.all(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
               ),
             ),
-            onPressed: onTap,
-            child: Text(
-              label,
-              style: GoogleFonts.notoSans(
-                fontWeight: FontWeight.w600,
-                fontSize: 15,
-                color: fontColor,
+            side: MaterialStateProperty.all(
+              BorderSide(
+                color: isEnabled ? borderColor : Color(0xFFd4d4d4),
               ),
+            ),
+          ),
+          onPressed: onTap,
+          child: Text(
+            label,
+            style: GoogleFonts.notoSans(
+              fontWeight: FontWeight.w600,
+              fontSize: 15,
+              color: fontColor,
             ),
           ),
         ),
