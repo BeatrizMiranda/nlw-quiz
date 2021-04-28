@@ -4,6 +4,10 @@ import 'package:nlwabril/core/app_text_styles.dart';
 import 'package:nlwabril/home/widget/chart/chart_widget.dart';
 
 class ScoreCard extends StatelessWidget {
+  final double percent;
+
+  const ScoreCard({Key? key, required this.percent}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -25,7 +29,7 @@ class ScoreCard extends StatelessWidget {
           children: [
             Expanded(
               flex: 1,
-              child: ChartWidget(),
+              child: ChartWidget(valuePercent: percent),
             ),
             Expanded(
               flex: 3,

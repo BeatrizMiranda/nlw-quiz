@@ -3,6 +3,7 @@ import 'package:nlwabril/challenge/widget/nextButton/next_button.dart';
 import 'package:nlwabril/core/app_colors.dart';
 import 'package:nlwabril/core/app_images.dart';
 import 'package:nlwabril/core/app_text_styles.dart';
+import 'package:share_plus/share_plus.dart';
 
 class ResultPage extends StatelessWidget {
   final String title;
@@ -51,11 +52,17 @@ class ResultPage extends StatelessWidget {
                 Row(
                   children: [
                     Expanded(
-                        child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 68),
-                      child: NextButton.purple(
-                          label: 'Compartilhar', onTap: () {}),
-                    )),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 68),
+                        child: NextButton.purple(
+                          label: 'Compartilhar',
+                          onTap: () {
+                            Share.share(
+                                'DevQuiz: Olha o que eu consegui, $title - com $correctAwnsers de $lenght acertos!');
+                          },
+                        ),
+                      ),
+                    ),
                   ],
                 ),
                 SizedBox(height: 24),
